@@ -24,14 +24,16 @@ app.get("*", function(req, res) {
 
 //GET db.json
 app.get("/api/notes", function(req, res) {
-    res.sendFile("../db/db.json");
+    console.log("I am being called to return notes!")
+    let rawData = fs.readFile('./db/db.json');
+    let notesVar = JSON.parse(rawData);
+    console.log(notesVar);
+    res.send(notesVar);
 });
-
-
 
 //POST api.notes
 app.post("/api/notes", function(req, res) {
-    console.log("I am being called!");
+    console.log("I am being called to save notes!");
     console.log(req.body);
     
     let data = JSON.stringify(req.body,null,2)

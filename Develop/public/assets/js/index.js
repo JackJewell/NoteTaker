@@ -53,7 +53,7 @@ var renderActiveNote = function() {
 
 // Get the note data from the inputs, save it to the db and update the view
 var handleNoteSave = function() {
-  console.log("Does note save even work? is this code broken?");
+  console.log("handleNoteSave has been called!");
   var newNote = {
     title: $noteTitle.val(),
     text: $noteText.val()
@@ -89,7 +89,9 @@ console.log(note);
 
 // Sets the activeNote and displays it
 var handleNoteView = function() {
+  console.log("HandleNoteView called!");
   activeNote = $(this).data();
+  console.log(activeNote);
   renderActiveNote();
 };
 

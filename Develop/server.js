@@ -61,12 +61,11 @@ app.post("/api/notes", function(req, res) {
     let data = [];
 
     parseJson.forEach(function(item){
+        i++;
         console.log(item);
         let dataVar = new DataClass(i,item.title,item.text);
         console.log(dataVar);
         data.push(dataVar);
-        i++;
-        console.log(i);
     });
     data = JSON.stringify(data,null,2);
     console.log(data);
@@ -75,11 +74,30 @@ app.post("/api/notes", function(req, res) {
         if (err) throw err;
         console.log("data written to file");
     });
+
+    return res.status(204).send();
 });
 
 //DELETE api.notes
 app.delete("/api/notes/:id", function(req, res){
-console.log("delete is being called!");
+    let idVar = (req.url).slice(11);
+    console.log(idVar);
+    console.log("delete is being called!");
+    let deleteVar = fs.readFileSync('./db/db.json',function(err){
+        if(err) throw err;
+    });
+    var parseDeleteJson = JSON.parse(deleteVar);
+
+    parseDeleteJson[idVar] = "";
+
+    data = JSON.stringify(parseDeleteJson,null,2);
+    console.log(data);
+
+    fs.writeFileSync('./db/db.json', data, (err) => {
+        if (err) throw err;
+        console.log("data written to file");
+    });
+
 });
 
 app.listen(PORT, function() {

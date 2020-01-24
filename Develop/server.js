@@ -35,6 +35,14 @@ app.get("*", function(req, res) {
 
 
 
+class DataClass{
+    constructor(id,title,text){
+        this.id = id,
+        this.title = title,
+        this.text = text
+    }
+}
+
 //POST api.notes
 app.post("/api/notes", function(req, res) {
     console.log("I am being called to save notes!");
@@ -49,7 +57,19 @@ app.post("/api/notes", function(req, res) {
     var parseJson = JSON.parse(contentVar);
     parseJson.push(req.body);
     console.log(parseJson);
-    let data = JSON.stringify(parseJson,null,2);
+    let i = 0;
+    let data = [];
+
+    parseJson.forEach(function(item){
+        console.log(item);
+        let dataVar = new DataClass(i,item.title,item.text);
+        console.log(dataVar);
+        data.push(dataVar);
+        i++;
+        console.log(i);
+    });
+    data = JSON.stringify(data,null,2);
+    console.log(data);
 
     fs.writeFileSync('./db/db.json', data, (err) => {
         if (err) throw err;
@@ -59,7 +79,7 @@ app.post("/api/notes", function(req, res) {
 
 //DELETE api.notes
 app.delete("/api/notes/:id", function(req, res){
-
+console.log("delete is being called!");
 });
 
 app.listen(PORT, function() {

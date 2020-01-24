@@ -35,6 +35,7 @@ var deleteNote = function(id) {
 
 // If there is an activeNote, display it, otherwise render empty inputs
 var renderActiveNote = function() {
+  console.log("renderActiveNote called!");
   $saveNoteBtn.hide();
 
   if (activeNote.id) {
@@ -52,12 +53,14 @@ var renderActiveNote = function() {
 
 // Get the note data from the inputs, save it to the db and update the view
 var handleNoteSave = function() {
+  console.log("Does note save even work? is this code broken?");
   var newNote = {
     title: $noteTitle.val(),
     text: $noteText.val()
   };
 
-  saveNote(newNote).then(function(data) {
+  saveNote(newNote).then(function() {
+    console.log("saveNote has been called!");
     getAndRenderNotes();
     renderActiveNote();
   });
@@ -71,6 +74,8 @@ var handleNoteDelete = function(event) {
   var note = $(this)
     .parent(".list-group-item")
     .data();
+
+console.log(note);
 
   if (activeNote.id === note.id) {
     activeNote = {};
@@ -113,6 +118,7 @@ var renderNoteList = function(notes) {
 
   for (var i = 0; i < notes.length; i++) {
     var note = notes[i];
+    console.log("renderNoteList has been called");
     console.log(note);
     var $li = $("<li class='list-group-item'>").data(note);
     var $span = $("<span>").text(note.title);

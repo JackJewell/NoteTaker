@@ -6,7 +6,6 @@ let app = express();
 
 
 let PORT = process.env.PORT || 3000;
-app.listen(PORT, function() {});
 
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
@@ -16,6 +15,7 @@ app.use(express.static("public"));
 app.get("/notes", function(req, res) {
     res.sendFile(path.join(__dirname, "./public/notes.html"));
 });
+
 //GET db.json
 app.get("/api/notes", function(req, res) {
     console.log("I am being called to return notes!");
@@ -48,8 +48,6 @@ app.post("/api/notes", function(req, res) {
     console.log("I am being called to save notes!");
     console.log(req.body);
     
-    
-
     let contentVar = fs.readFileSync('./db/db.json',function(err){
         if(err) throw err;
     });
@@ -80,15 +78,16 @@ app.post("/api/notes", function(req, res) {
 
 //DELETE api.notes
 app.delete("/api/notes/:id", function(req, res){
-    let idVar = (req.url).slice(11);
+    let idVar = req.params.id
+    idVar--;
     console.log(idVar);
     console.log("delete is being called!");
     let deleteVar = fs.readFileSync('./db/db.json',function(err){
         if(err) throw err;
     });
     var parseDeleteJson = JSON.parse(deleteVar);
-
-    parseDeleteJson[idVar] = "";
+    console.log(parseDeleteJson);
+    parseDeleteJson.splice(idVar,1);
 
     data = JSON.stringify(parseDeleteJson,null,2);
     console.log(data);
@@ -97,7 +96,7 @@ app.delete("/api/notes/:id", function(req, res){
         if (err) throw err;
         console.log("data written to file");
     });
-
+    return res.status(204).send();
 });
 
 app.listen(PORT, function() {
